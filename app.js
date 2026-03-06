@@ -23,7 +23,7 @@ app.use(express.static(path.join(__dirname,"/public")));
 
 
 app.get("/", (req,res) =>{
-res.send("hhh");
+res.send("welcome");
 });
 
 app.get("/listings",async (req,res) =>{
