@@ -5,7 +5,8 @@ const path= require("path");
 const Listing= require("./models/listing.js");
 const methodOverride=require("method-override");
 const ejsMate= require("ejs-mate");
-const wrapAsync = require("./utils/wrapAsync.js");
+const wrapAsync = require("./utils/wrapasync.js");
+const ExpressError= require("./utils/ExpressError.js");
 
 main().catch(err => console.log(err));
 
@@ -44,15 +45,12 @@ res.render("listings/show",{listing});
 
 });
 
-app.post("/listings", async (req, res,next) => {
-  try{
+app.post("/listings", wrapAsync(
+  async (req, res,next) => {
       const newListing = new Listing(req.body.listing);
   await newListing.save();
-  res.redirect("/listings");
-  }catch(err){
-     next(err);
-  }
-});
+  res.redirect("/listings");  
+}));
  
 app.get("/listings/:id/edit", async (req, res) => {
   let { id } = req.params;
@@ -73,6 +71,7 @@ app.delete("/listings/:id", async (req, res) => {
   res.redirect("/listings");
 });
 
+
 //app.get("/testListing",async (req,res) =>{
  //let sampleListing= new Listing({
    //title:"my new villa",
@@ -87,10 +86,24 @@ app.delete("/listings/:id", async (req, res) => {
  //res.send("successful;")
 //});
 
-app.use((err,req,res,next) =>{
-  res.send("something went wrong!");
+app.use((req, res, next) => {
+  next(new ExpressError(404, "Page Not Found!"));
 });
 
-app.listen(8080, () => {
-console.log("sever is listening");
+
+
+app.use((err, req, res, next) => {
+  console.error(err);
+
+  if (!res) {
+    return next(err);
+  }
+
+  const statusCode = err.statusCode ? err.statusCode : 500;
+  const message = err.message ? err.message : "Something went wrong";
+
+  res.status(statusCode).send(message);
 });
+
+
+
