@@ -27,23 +27,23 @@ app.get("/", (req,res) =>{
 res.send("welcome");
 });
 
-app.get("/listings",async (req,res) =>{
+app.get("/listings",wrapAsync(async (req,res) =>{
  const allListings= await Listing.find({});
  res.render("listings/index",{allListings});
 
 
-});
+}));
 
 app.get("/listings/new", (req,res) =>{
   res.render("listings/new");
 });
 
-app.get("/listings/:id",async(req,res) =>{
+app.get("/listings/:id", wrapAsync(async(req,res) =>{
  let{id}=req.params;
 const listing= await Listing.findById(id);
 res.render("listings/show",{listing});
 
-});
+}));
 
 app.post("/listings", wrapAsync(
   async (req, res,next) => {
@@ -52,24 +52,24 @@ app.post("/listings", wrapAsync(
   res.redirect("/listings");  
 }));
  
-app.get("/listings/:id/edit", async (req, res) => {
+app.get("/listings/:id/edit",wrapAsync( async (req, res) => {
   let { id } = req.params;
   const listing = await Listing.findById(id);
   res.render("listings/edit", { listing });
-});
+}));
 
-app.put("/listings/:id", async (req, res) => {
+app.put("/listings/:id",wrapAsync( async (req, res) => {
   let { id } = req.params;
   await Listing.findByIdAndUpdate(id, { ...req.body.listing });
  res.redirect(`/listings/${id}`);
-});
+}));
 
-app.delete("/listings/:id", async (req, res) => {
+app.delete("/listings/:id",wrapAsync( async (req, res) => {
   let { id } = req.params;
   let deletedListing = await Listing.findByIdAndDelete(id);
 
   res.redirect("/listings");
-});
+}));
 
 
 //app.get("/testListing",async (req,res) =>{
