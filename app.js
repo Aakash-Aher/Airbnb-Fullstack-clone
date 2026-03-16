@@ -86,6 +86,10 @@ app.delete("/listings/:id",wrapAsync( async (req, res) => {
  //res.send("successful;")
 //});
 
+app.listen(8080, () => {
+console.log("sever is listening");
+});
+
 app.use((req, res, next) => {
   next(new ExpressError(404, "Page Not Found!"));
 });
