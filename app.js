@@ -97,17 +97,8 @@ app.use((req, res, next) => {
 
 
 app.use((err, req, res, next) => {
-  console.error(err);
-
-  if (!res) {
-    return next(err);
-  }
-
-  const statusCode = err.statusCode ? err.statusCode : 500;
-  const message = err.message ? err.message : "Something went wrong";
-
+  let { statusCode = 500, message = "Something went wrong!" } = err;
   res.status(statusCode).send(message);
 });
-
 
 
