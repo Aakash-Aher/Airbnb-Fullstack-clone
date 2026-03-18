@@ -72,19 +72,6 @@ app.delete("/listings/:id",wrapAsync( async (req, res) => {
 }));
 
 
-//app.get("/testListing",async (req,res) =>{
- //let sampleListing= new Listing({
-   //title:"my new villa",
-   //description:"by the beach",
-   //price:1200,
-   //location:"new goa ,Goa",
-   //country:"India",
-
- //});
- //await sampleListing.save();
- //console.log("sample is saved");
- //res.send("successful;")
-//});
 
 app.listen(8080, () => {
 console.log("sever is listening");
