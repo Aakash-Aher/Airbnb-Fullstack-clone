@@ -77,7 +77,7 @@ app.listen(8080, () => {
 console.log("sever is listening");
 });
 
-app.use((req, res, next) => {
+app.use("*",(req, res, next) => {
   next(new ExpressError(404, "Page Not Found!"));
 });
 
